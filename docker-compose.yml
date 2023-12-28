@@ -1,0 +1,38 @@
+version: "3.9"
+   
+services:
+  db:
+    image: postgres
+    volumes:
+      - "./data/db:/var/lib/postgresql/data"
+    env_file:
+      - .env
+    ports: 
+      - "5432:5432"
+  
+  web:
+    image: django_image
+    build: .
+    command: >
+      bash -c "python manage.py migrate
+      && python manage.py collectstatic --noinput
+      && gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
+    env_file: 
+      - .env
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  webserver:
+    image: nginx
+    build: ./compose/nginx
+    volumes:
+      - ./compose/nginx:/etc/nginx/conf.d
+    ports:
+     - 80:80
+     - 443:443
+    depends_on:
+      - web
