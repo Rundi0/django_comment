@@ -17,9 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-from comments.urls import api_router as comment_router
+from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include(comment_router.urls)),
+    path("api/", include("comments.urls")),
+    path("demo_recaptcha/", views.demo_recaptcha, name="demo_recaptcha"),
 ]

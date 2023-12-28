@@ -77,15 +77,3 @@ set -o allexport; source .env; set +o allexport
 > activate the virtual environment & export all environment variables automatically ༼ つ ◕_◕ ༽つ━☆ﾟ.\*･｡ﾟ
 
 ## About the application
-
-⚠️ Notion project database id is taken directly from the exact Notion workspace.
-
-All ids are taken from the URL. Just go to your workspace and copy the UUID in the URL.
-All ids should be pasted to the `.env` file
-
-![The example of the database ID](static/notion_url.png)
-
-
-👉 Then, add a new integration to your space
-
-![The connection flow](static/connection_flow.png)

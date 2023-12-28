@@ -6,7 +6,6 @@ class Comment(models.Model):
     username = models.CharField(max_length=32)
     email = models.EmailField()
     home_page = models.URLField(blank=True)
-    # captcha = fields.CaptchaField()
     text = models.TextField()
     reply_to = models.ForeignKey(
         "self",

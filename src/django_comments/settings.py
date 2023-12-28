@@ -27,7 +27,6 @@ DEBUG = os.environ["DEBUG"]
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -39,10 +38,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "django_filters",
-    "captcha",
+    "drf_recaptcha",
     "bleach",
     "comments",
 ]
+
+DRF_RECAPTCHA_SECRET_KEY = os.environ["RECAPTCHA_SECRET_KEY"]
+RECAPTCHA_SITE_KEY = os.environ["RECAPTCHA_SITE_KEY"]
 
 SESSION_COOKIE_SECURE = True
 # Ensures the session cookie is only sent over HTTPS connections
@@ -139,6 +141,25 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+            "/home/html/example.com",
+            "/home/html/default",
+        ],
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.request",
+                "django.contrib.messages.context_processors.messages",
+            ],
+        },
+    },
+]
 
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
