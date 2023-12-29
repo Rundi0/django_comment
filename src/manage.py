@@ -6,6 +6,12 @@ import sys
 import dotenv
 
 
+def read_dotenv():
+    dotenv.read_dotenv(
+        dotenv=os.path.join(os.path.dirname(__file__), ".."), override=True
+    )
+
+
 def main():
     """Run administrative tasks."""
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_comments.settings")
@@ -21,7 +27,5 @@ def main():
 
 
 if __name__ == "__main__":
-    dotenv.read_dotenv(
-        dotenv=os.path.join(os.path.dirname(__file__), ".."), override=True
-    )
+    read_dotenv()
     main()

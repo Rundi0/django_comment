@@ -14,13 +14,14 @@ services:
     image: django_image
     build: .
     command: >
-      bash -c "python manage.py migrate
+      bash -c "cd ./src && python ./manage.py migrate
       && python manage.py collectstatic --noinput
-      && gunicorn mysite.wsgi:application --bind 0.0.0.0:8000"
+      && gunicorn django_comments.wsgi:application --bind 0.0.0.0:8000"
     env_file: 
       - .env
     volumes:
       - .:/code
+      - static_file:/var/www/html
     ports:
       - "8000:8000"
     depends_on:
@@ -31,8 +32,12 @@ services:
     build: ./compose/nginx
     volumes:
       - ./compose/nginx:/etc/nginx/conf.d
+      - static_file:/var/www/html
     ports:
-     - 80:80
-     - 443:443
+     - "80:80"
+     - "443:443"
     depends_on:
       - web
+
+volumes:
+  static_file:
