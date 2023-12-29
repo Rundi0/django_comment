@@ -69,7 +69,7 @@ python ./src/manage.py runserver
 
 ```bash
 # create the .env file base on the .env.default file
-cp .env.default .env
+cp default.env .env
 
 # export all environment variables on Unix
 set -o allexport; source .env; set +o allexport
