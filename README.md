@@ -1,8 +1,13 @@
-# About
+# Commenting Web Service with Django
+
+This web service is developed using Django to create a user-friendly platform where users can leave comments. The main goal is to facilitate easy interaction and information exchange among participants.
+
+Key Features
+Comment Submission: Users can leave their comments on the platform by entering the comment text through a convenient form.
+
+Database Storage: All entered comments are stored in a relational database. Each comment includes the text, the time of creation, and data that identifies the user.
 
 This documents includes the information about setting up and adjusting the project locally.
-
-<br>
 
 ## 🔨 Setup the project locally
 
@@ -14,14 +19,12 @@ Clone the project from GitHub
 git clone git@github.com:Rundi0/django_comment.git
 ```
 
-<br>
-
 ## 🔧 Setup the environment
 
 ### 📌 Setup dependencies
 
 For running the application locally without a tool like Docker you would need to install all dependencies by yourself.
-First of all you have to install Python3.11 on your machine since they are main infrastructure components.
+First of all you have to install Python3.12 on your machine since they are main infrastructure components.
 
 Then you have to install Python dependencies that are used for running the application. For doing this we just use build-in tools and pip-tools.
 
@@ -59,7 +62,7 @@ pip install -r requirements/main.txt  # perform the installation process
 ## 🏃‍♂️ Run the application
 
 ```bash
-python -m uvicorn src.main:app
+python ./src/manage.py runserver
 ```
 
 ## Using `.env` file
@@ -76,9 +79,11 @@ set -o allexport; source .env; set +o allexport
 >
 > activate the virtual environment & export all environment variables automatically ༼ つ ◕_◕ ༽つ━☆ﾟ.\*･｡ﾟ
 
-## Shame database
+## Database
 
-### Table:
+The project incorporates PostgreSQL as the chosen database, and it operates within a Docker container for streamlined deployment and management.
+
+### Table
 
 > Comment:
 > |Colume      | Type                     | Note                             |
@@ -92,3 +97,45 @@ set -o allexport; source .env; set +o allexport
 > |reply_to_id | bigint                   |                                  |
 
 ## About the application
+
+### Security Measures
+
+To protect against XSS attacks, the web service uses the bleach library.
+Security measures include setting the SESSION_COOKIE_SECURE and CSRF_COOKIE_SECURE flags to ensure that session and CSRF cookies are transmitted only over HTTPS connections, along with enabling the SESSION_COOKIE_HTTPONLY and CSRF_COOKIE_HTTPONLY flags to restrict access to these cookies via JavaScript, enhancing protection against potential security threats.
+
+### Caching
+
+The web service implements caching for improved performance. Caching helps reduce response times by storing frequently requested data and serving it from memory.
+
+### Endpoints Description
+
+#### /admin
+
+This endpoint provides basic administration functions in Django. It is typically used for managing the Django application, including user management, database administration, and other site configurations. Access to this endpoint is restricted to users with administrative privileges.
+
+#### /api/comment
+
+- GET: Retrieve comments with optional filtering and sorting options.
+  - Query Parameters:
+    - `ordering`: Sort comments by a specific criterion (e.g., username, email, created_at). LIFO default ordering.
+    - `reply_to`: Filter comments based on the ID of the parent comment to which they are replying.
+    - `reply_to_isnull`: Filter comments to include only top-level comments (not replies).
+    - `page`: The page number for paginated results.
+    - `page_size`: The number of comments to include on each page. Default is 25.
+
+- POST: Add new comments.
+  - Request Body:
+    - `recaptcha`: The result of the CAPTCHA verification.
+    - `username`: The username of the commenter.
+    - `email`: The email address of the commenter.
+    - `home_page`: The commenter's home page URL.
+    - `text`: The content of the comment.
+    - `reply_to`: The ID of the parent comment to which the new comment is replying. Use `null` for top-level comments.
+
+#### /demo_recaptcha
+
+This endpoint serves as a simple page allowing users to pass a CAPTCHA without a frontend component. It records the CAPTCHA result in the JavaScript console, making it accessible for use in other endpoints (e.g., in the /api/comment POST endpoint).
+
+#### /api/token
+
+This endpoint implements JWT generation for potential future user authentication. It is designed to provide a secure way to generate and validate JSON Web Tokens for user authentication purposes.
